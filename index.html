@@ -11,34 +11,72 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+
+    <style>
+      .container,
+      .form-group {
+        margin-top: 30px;
+      }
+
+      .form-control {
+        width: 150px;
+      }
+
+      #buttons {
+        margin-top: 30px;
+      }
+
+      img {
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
-    <div class="container" style="margin-top: 30px;">
+    <div class="container">
+      <form action="">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control text-center mx-auto"
+            id="newButton"
+            placeholder="New Button"
+          />
+        </div>
+        <div class="text-center">
+          <button id="submit" type="submit" class="btn btn-secondary">
+            Submit
+          </button>
+        </div>
+      </form>
       <div id="buttons" class="text-center"></div>
       <div id="gifs-appear-here" class="text-center"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-      //
-      //add form input that takes the value and push() it to topics array
-      //
-
       //create array of cars called topics
       var topics = ["honda", "toyota", "nissan"];
+
+      //takes the value from form input and push() it to topics array
+      $("#submit").click(function(event) {
+        event.preventDefault();
+        var newButton = $("#newButton").val();
+        topics.push(newButton);
+        start();
+      });
 
       //on button click append 10 STILL images on the page
       //display a rating on each image
       function makeImage(obj) {
         return `
               <div>
-                <p>Rating: ${obj.rating}</p>
                 <img src="${obj.images.fixed_height_still.url}" 
                 data-still="${obj.images.fixed_height_still.url}" 
                 data-animate="${obj.images.fixed_height.url}"
                 data-state="still"
                 class="gif"
-                /> 
+                />
+                <p>Rating: ${obj.rating}</p>
               </div>
             `;
       }
@@ -58,20 +96,18 @@
         }
       });
 
-      //for each item in topics create a button and appends it on the page
+      //for each item in topics creates a button and appends it on the page
       function makeButton(indx) {
         return `
-            <button data-car="${indx}" class="btn btn-primary">${indx}</button>
+            <button id="topicButton" data-car="${indx}" class="btn btn-primary">${indx}</button>
         `;
       }
-
+      //calls makeButton for each array index
       function start() {
         $("#buttons").html(topics.map(makeButton));
       }
-
-      start();
-
-      $(".btn").on("click", function() {
+      //on topic button click, load 10 gifs onto page
+      $(document).on("click", ".btn-primary", function() {
         var subj = $(this).attr("data-car");
         var queryURL =
           "https://api.giphy.com/v1/gifs/search?q=" +
@@ -82,11 +118,11 @@
           url: queryURL,
           method: "GET"
         }).then(function(response) {
-          console.log(response);
-          console.log(queryURL);
           $("#gifs-appear-here").prepend(response.data.map(makeImage));
         });
       });
+
+      start();
     </script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
