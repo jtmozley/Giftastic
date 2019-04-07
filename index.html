@@ -5,39 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Giftastic</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
-    <button data-animal="cat">meow</button>
-    <button data-animal="dog">woof</button>
-    <button data-animal="bird">chirp</button>
-    <div id="gifs-appear-here"></div>
+    <div class="container" style="margin-top: 30px;">
+      <div id="buttons" class="text-center"></div>
+      <div id="gifs-appear-here" class="text-center"></div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-    //create array of cars called topics
+      //create array of cars called topics
       var topics = ["honda", "toyota", "nissan"];
 
+      //on button click append 10 STILL images on the page
       function makeImage(obj) {
         return `
               <div>
                 <p>Rating: ${obj.rating}</p>
-                <img src="${obj.images.fixed_height.url}" /> 
+                <img src="${obj.images.fixed_height_still.url}" 
+                data-still="${obj.images.fixed_height_still.url}" 
+                data-animate="${obj.images.fixed_height.url}"
+                data-state="still"
+                class="gif"
+                /> 
               </div>
             `;
       }
 
-      
+      $("document").on("click", ".gif", function() {
+        console.log("print");
+        var state = $(this).attr("data-state");
+        if (state === "still") {
+          $(this).attr("data-state", "animated");
+          $(this).attr("src", $(this).attr("data-animate"));
+        } else {
+          $(this).attr("data-state", "still");
+          $(this).attr("src", $(this).attr("data-still"));
+        }
+      });
+
       //for each item in topics create a button and appends it on the page
-      //on button click append 10 STILL images on the page
+      function makeButton(indx) {
+        return `
+            <button data-car="${indx}" class="btn btn-primary">${indx}</button>
+        `;
+      }
+
+      function start() {
+        $("#buttons").html(topics.map(makeButton));
+      }
+
+      start();
+
       //on image click ANIMATE the image
       //on 2nd image click image back to STILL
       //display a rating on each image
       //add form input that takes the value and push() it to topics array
 
       $("button").on("click", function() {
-        var animal = $(this).attr("data-animal");
+        var subj = $(this).attr("data-car");
         var queryURL =
           "https://api.giphy.com/v1/gifs/search?q=" +
-          animal +
+          subj +
           "&api_key=dc6zaTOxFJmzC&limit=10";
 
         $.ajax({
@@ -45,9 +80,20 @@
           method: "GET"
         }).then(function(response) {
           console.log(response);
+          console.log(queryURL);
           $("#gifs-appear-here").prepend(response.data.map(makeImage));
         });
       });
     </script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
