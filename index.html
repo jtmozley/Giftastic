@@ -20,10 +20,15 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+      //
+      //add form input that takes the value and push() it to topics array
+      //
+
       //create array of cars called topics
       var topics = ["honda", "toyota", "nissan"];
 
       //on button click append 10 STILL images on the page
+      //display a rating on each image
       function makeImage(obj) {
         return `
               <div>
@@ -38,8 +43,11 @@
             `;
       }
 
-      $("document").on("click", ".gif", function() {
+      //on image click ANIMATE the image
+      //on 2nd image click image back to STILL
+      $(document).on("click", ".gif", function(event) {
         console.log("print");
+        event.preventDefault();
         var state = $(this).attr("data-state");
         if (state === "still") {
           $(this).attr("data-state", "animated");
@@ -63,12 +71,7 @@
 
       start();
 
-      //on image click ANIMATE the image
-      //on 2nd image click image back to STILL
-      //display a rating on each image
-      //add form input that takes the value and push() it to topics array
-
-      $("button").on("click", function() {
+      $(".btn").on("click", function() {
         var subj = $(this).attr("data-car");
         var queryURL =
           "https://api.giphy.com/v1/gifs/search?q=" +
