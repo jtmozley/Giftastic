@@ -1,5 +1,5 @@
+https://jtmozley.github.io/Giftastic/
 # Giftastic
-##https://jtmozley.github.io/Giftastic/
 A .gif app that displays gif's from the user searched category
 ## Author
 - Justin Mozley
