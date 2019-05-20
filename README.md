@@ -7,4 +7,4 @@ A .gif app that displays gif's from the user searched category
 - jQuery
 - Bootstrap
 - AJAX
-- RESTful API
+- Gify API
