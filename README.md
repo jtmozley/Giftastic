@@ -6,3 +6,5 @@ A .gif app that displays gif's from the user searched category
 ## Technologies Used
 - jQuery
 - Bootstrap
+- AJAX
+- RESTful API
